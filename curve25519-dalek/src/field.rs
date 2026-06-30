@@ -28,7 +28,6 @@
 use cfg_if::cfg_if;
 
 use subtle::Choice;
-use subtle::ConditionallyNegatable;
 use subtle::ConditionallySelectable;
 use subtle::ConstantTimeEq;
 
@@ -290,7 +289,7 @@ impl FieldElement {
 
         // Choose the nonnegative square root.
         let r_is_negative = r.is_negative();
-        r.conditional_negate(r_is_negative);
+        let r_neg = -&r; r.conditional_assign(&r_neg, r_is_negative);
 
         let was_nonzero_square = correct_sign_sqrt | flipped_sign_sqrt;
 
